@@ -3,9 +3,6 @@
    ============================================================ */
 const GITHUB_USERNAME = "zoha-hasan"; // <-- change this
 
-// Manual, since GitHub's public API has no "contribution hours" metric.
-const CONTRIBUTION_HOURS = "—"; // e.g. "420+"
-
 // Override auto-formatted names for specific repos.
 // key = exact repo name on GitHub, value = display name.
 const CUSTOM_REPO_NAMES = {
@@ -22,11 +19,18 @@ const ACRONYMS = [
 // Repos to hide from the Field Notes grid (config repos, forks you don't want shown, etc.)
 const HIDE_REPOS = [GITHUB_USERNAME + "." + "github.io"];
 
-// Toolkit / Instruments chips
-const INSTRUMENTS = [
-  "Python", "QGIS", "Google Earth Engine", "PostGIS", "R",
-  "Remote Sensing", "LULC Classification", "Watershed Delineation",
-  "CMIP6 / Climate Modeling", "Web Mapping", "SQL", "Git"
+// Software/platforms GitHub can't detect on its own
+const TOOLKIT = [
+  "QGIS", "ArcMap", "Google Earth Engine", "PostGIS", "Visual Studio Code",
+  "ERDAS Imagine", "Jupyter Notebook", "MATLAB", "AutoCAD"
+];
+
+// Analytical methods and workflows
+const METHODS = [
+  "LULC Classification", "Watershed Delineation", "Run-off Modelling",
+  "Climate Projection & Bias Correction", "Remote Sensing Analysis", "Web Mapping",
+  "QGIS Plugin Development", "Statistical Analysis", "Data Structures & Algorithms",
+  "Photogrammetry", "Image Processing", "C++", "Numerical Analysis"
 ];
 
 /* ============================================================
@@ -55,6 +59,91 @@ function formatFullDate(iso){
   return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 }
 
+// Pull a short, readable excerpt straight from a repo's README.
+async function fetchReadmeExcerpt(repoName){
+  try{
+    const res = await fetch(
+      `https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}/readme`,
+      { headers: { Accept: "application/vnd.github.raw" } }
+    );
+    if (!res.ok) return null;
+    const raw = await res.text();
+    return extractExcerpt(raw);
+  }catch(err){
+    return null;
+  }
+}
+
+// Strip markdown noise (images, badges, headers, links, code fences) and
+// return the first real sentence-length line, trimmed to ~140 chars.
+function extractExcerpt(markdown){
+  const lines = markdown.split(/\r?\n/);
+  for (let line of lines){
+    if (/^\s*```/.test(line)) continue;
+    const clean = line
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, "")      // images
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")    // [text](url) -> text
+      .replace(/<[^>]+>/g, "")                    // stray html
+      .replace(/^#+\s*/, "")                      // headers
+      .replace(/[*_`>]/g, "")                     // md emphasis chars
+      .trim();
+    // skip empty lines, badge-only lines, or anything too short to be a real sentence
+    if (clean.length > 25 && !/^!\[/.test(line)){
+      return clean.length > 140 ? clean.slice(0, 137).trim() + "…" : clean;
+    }
+  }
+  return null;
+}
+
+// Total commit count for one repo, via the Link-header page-count trick
+// (avoids paging through every commit just to count them).
+async function fetchCommitCount(repoName){
+  try{
+    const res = await fetch(
+      `https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}/commits?per_page=1`
+    );
+    if (!res.ok) return 0;
+    const link = res.headers.get("Link");
+    if (link){
+      const match = link.match(/&page=(\d+)>;\s*rel="last"/);
+      if (match) return parseInt(match[1], 10);
+    }
+    const data = await res.json();
+    return Array.isArray(data) ? data.length : 0;
+  }catch(err){
+    return 0;
+  }
+}
+
+// Sums commit counts across all owned, non-fork repos.
+// Note: only counts commits in repos you own — not commits made
+// as a contributor to other people's repos.
+async function loadTotalCommits(repos){
+  try{
+    const counts = await Promise.all(repos.map(r => fetchCommitCount(r.name)));
+    const total = counts.reduce((a, b) => a + b, 0);
+    document.getElementById("stat-commits").textContent = total.toLocaleString();
+  }catch(err){
+    console.warn("Could not load commit totals:", err);
+  }
+}
+
+// Uses the public, unauthenticated jogruber contributions API
+// (scrapes the same data your profile's contribution graph shows).
+async function loadContributionsThisYear(){
+  try{
+    const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=last`);
+    if (!res.ok) throw new Error("contributions fetch failed");
+    const data = await res.json();
+    const totals = Object.values(data.total || {});
+    const thisYear = totals.length ? totals[totals.length - 1] : null;
+    document.getElementById("stat-contrib").textContent = thisYear !== null ? thisYear.toLocaleString() : "—";
+  }catch(err){
+    console.warn("Could not load contributions:", err);
+    document.getElementById("stat-contrib").textContent = "—";
+  }
+}
+
 /* ============================================================
    GITHUB DATA
    ============================================================ */
@@ -67,8 +156,6 @@ async function loadProfile(){
     document.getElementById("avatar").src = user.avatar_url;
     document.getElementById("display-name").textContent = user.name || user.login;
     document.getElementById("stat-repos").textContent = user.public_repos ?? "—";
-    document.getElementById("stat-followers").textContent = user.followers ?? "—";
-    document.getElementById("stat-hours").textContent = CONTRIBUTION_HOURS;
     document.getElementById("stat-joined").textContent = formatDate(user.created_at);
   }catch(err){
     console.warn("Could not load GitHub profile:", err);
@@ -98,11 +185,16 @@ async function loadRepos(){
     const mostRecent = repos.reduce((a, b) => new Date(a.pushed_at) > new Date(b.pushed_at) ? a : b);
     document.getElementById("last-updated").textContent = formatFullDate(mostRecent.pushed_at);
 
-    grid.innerHTML = repos.map(repo => {
+    // README excerpt > About description > generic fallback, fetched in parallel
+    const excerpts = await Promise.all(
+      repos.map(repo => fetchReadmeExcerpt(repo.name))
+    );
+
+    grid.innerHTML = repos.map((repo, i) => {
       const title = formatRepoName(repo.name);
-      const desc = repo.description
-        ? repo.description
-        : "A field note in progress — details coming soon.";
+      const desc = excerpts[i]
+        || repo.description
+        || "A field note in progress — details coming soon.";
       const tags = [repo.language, ...(repo.topics || [])]
         .filter(Boolean)
         .slice(0, 4);
@@ -119,6 +211,7 @@ async function loadRepos(){
     }).join("");
 
     loadLanguages(repos);
+    loadTotalCommits(repos);
   }catch(err){
     console.warn("Could not load repos:", err);
     if (loadingEl) loadingEl.textContent = "Field notes couldn't be reached right now.";
@@ -179,11 +272,75 @@ async function loadLanguages(repos){
 }
 
 /* ============================================================
+   AMBIENT BACKGROUND — hand-drawn-style topographic contours
+   ============================================================ */
+// Smooth a ring of points into a closed, organic loop (Catmull-Rom -> Bezier).
+function smoothClosedPath(points){
+  const n = points.length;
+  let d = `M ${points[0][0].toFixed(1)},${points[0][1].toFixed(1)} `;
+  for (let i = 0; i < n; i++){
+    const p0 = points[(i - 1 + n) % n];
+    const p1 = points[i];
+    const p2 = points[(i + 1) % n];
+    const p3 = points[(i + 2) % n];
+    const c1x = p1[0] + (p2[0] - p0[0]) / 6;
+    const c1y = p1[1] + (p2[1] - p0[1]) / 6;
+    const c2x = p2[0] - (p3[0] - p1[0]) / 6;
+    const c2y = p2[1] - (p3[1] - p1[1]) / 6;
+    d += `C ${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)} `;
+  }
+  return d + "Z";
+}
+
+// One irregular blob outline — a real elevation contour, not a circle.
+function contourRing(cx, cy, baseRadius, wobble, pointCount){
+  const pts = [];
+  for (let i = 0; i < pointCount; i++){
+    const angle = (i / pointCount) * Math.PI * 2;
+    const r = baseRadius + (Math.random() * 2 - 1) * wobble;
+    pts.push([cx + Math.cos(angle) * r, cy + Math.sin(angle) * r]);
+  }
+  return smoothClosedPath(pts);
+}
+
+// A cluster of nested, irregular contour rings (like a hill on a topo map).
+function contourCluster(cx, cy, ringCount, baseRadius, color){
+  let markup = "";
+  for (let i = 0; i < ringCount; i++){
+    const shrink = 1 - (i / ringCount) * 0.75;
+    const r = baseRadius * shrink;
+    const wobble = baseRadius * (0.08 + Math.random() * 0.1);
+    const strokeWidth = (0.7 + Math.random() * 1.5).toFixed(2);
+    const opacity = (0.4 + Math.random() * 0.6).toFixed(2);
+    const jitterX = (Math.random() * 16 - 8);
+    const jitterY = (Math.random() * 16 - 8);
+    const d = contourRing(cx + jitterX, cy + jitterY, r, wobble, 8 + Math.floor(Math.random() * 5));
+    markup += `<path d="${d}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" opacity="${opacity}"/>`;
+  }
+  return markup;
+}
+
+function initTopoBackground(){
+  const container = document.querySelector(".topo-bg");
+  if (!container) return;
+  const w = 1600, h = 1200;
+  const mahogany = "#5C2A1E", moss = "#5B7B4F";
+
+  let inner = "";
+  inner += contourCluster(260, 260, 4, 190, mahogany);
+  inner += contourCluster(1280, 380, 4, 220, moss);
+  inner += contourCluster(680, 980, 3, 160, mahogany);
+  inner += contourCluster(1400, 1050, 3, 180, moss);
+
+  container.innerHTML = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">${inner}</svg>`;
+}
+
+/* ============================================================
    STATIC CONTENT — instruments
    ============================================================ */
-function renderInstruments(){
-  const list = document.getElementById("instrument-list");
-  list.innerHTML = INSTRUMENTS.map(item => `
+function renderChipList(containerId, items){
+  const list = document.getElementById(containerId);
+  list.innerHTML = items.map(item => `
     <span class="instrument-chip"><span class="dot"></span>${item}</span>
   `).join("");
 }
@@ -223,7 +380,8 @@ function initScrollProgress(){
 }
 
 function initCompassTouch(){
-  // Hover works on desktop via CSS; this adds tap support for touch devices.
+  // Click/tap is the primary trigger on every device — hover only shows
+  // the small hint tag, so mouse and touch behave the same way.
   const wrap = document.getElementById("compass-wrap");
   wrap.addEventListener("click", () => {
     const isActive = wrap.classList.toggle("active");
@@ -241,10 +399,13 @@ function initCompassTouch(){
    INIT
    ============================================================ */
 document.addEventListener("DOMContentLoaded", () => {
-  renderInstruments();
+  initTopoBackground();
+  renderChipList("toolkit-list", TOOLKIT);
+  renderChipList("methods-list", METHODS);
   initNav();
   initScrollProgress();
   initCompassTouch();
   loadProfile();
   loadRepos();
+  loadContributionsThisYear();
 });

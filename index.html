@@ -37,6 +37,10 @@
     <svg viewBox="0 0 32 32" class="nav-icon"><circle cx="16" cy="16" r="4"/><path d="M16 4v4M16 24v4M4 16h4M24 16h4M7.5 7.5l2.8 2.8M21.7 21.7l2.8 2.8M24.5 7.5l-2.8 2.8M10.3 21.7l-2.8 2.8" stroke-linecap="round"/></svg>
     <span class="nav-label">Instruments</span>
   </button>
+  <button class="nav-btn" data-target="#methods" aria-label="Methods">
+    <svg viewBox="0 0 32 32" class="nav-icon"><path d="M8 6h16v20l-8-5-8 5z"/></svg>
+    <span class="nav-label">Methods</span>
+  </button>
   <button class="nav-btn" data-target="#languages" aria-label="Legend">
     <svg viewBox="0 0 32 32" class="nav-icon"><path d="M16 27s9-7.5 9-14.5S21 3 16 3 7 5.9 7 12.5 16 27 16 27z"/><circle cx="16" cy="12.5" r="3"/></svg>
     <span class="nav-label">Legend</span>
@@ -49,39 +53,44 @@
   <section id="profile" class="section hero">
     <div class="hero-inner">
 
-      <div class="compass-wrap" id="compass-wrap" tabindex="0" role="button" aria-expanded="false" aria-label="Show about me">
+      <div class="compass-wrap" id="compass-wrap" tabindex="0" role="button" aria-expanded="false" aria-label="Tap to show about me">
         <div class="compass-ring">
           <svg class="compass-face" viewBox="0 0 120 120" aria-hidden="true">
-            <circle cx="60" cy="60" r="56" class="compass-outer"/>
-            <circle cx="60" cy="60" r="48" class="compass-inner"/>
+            <circle cx="60" cy="60" r="57" class="compass-outer"/>
+            <circle cx="60" cy="60" r="49" class="compass-inner"/>
             <g class="compass-ticks">
-              <line x1="60" y1="6" x2="60" y2="16"/>
-              <line x1="60" y1="104" x2="60" y2="114"/>
-              <line x1="6" y1="60" x2="16" y2="60"/>
-              <line x1="104" y1="60" x2="114" y2="60"/>
+              <line x1="60" y1="5" x2="60" y2="16"/>
+              <line x1="60" y1="104" x2="60" y2="115"/>
+              <line x1="5" y1="60" x2="16" y2="60"/>
+              <line x1="104" y1="60" x2="115" y2="60"/>
             </g>
-            <text x="60" y="17" class="compass-n">N</text>
+            <text x="60" y="16" class="compass-n">N</text>
           </svg>
           <svg class="compass-needle" viewBox="0 0 120 120" aria-hidden="true">
-            <polygon points="60,20 66,60 60,64 54,60" class="needle-north"/>
-            <polygon points="60,100 66,60 60,56 54,60" class="needle-south"/>
-            <circle cx="60" cy="60" r="4" class="needle-pin"/>
+            <polygon points="60,18 67,60 60,65 53,60" class="needle-north"/>
+            <polygon points="60,102 67,60 60,55 53,60" class="needle-south"/>
+            <circle cx="60" cy="60" r="4.5" class="needle-pin"/>
           </svg>
           <img class="avatar" id="avatar" src="" alt="Profile photo">
         </div>
 
+        <div class="compass-hint" aria-hidden="true">
+          <span class="hint-string"></span>
+          <span class="hint-label">🍃 tap to orient</span>
+        </div>
+
         <div class="about-card" id="about-card">
           <p class="about-eyebrow">Field Position</p>
-          <p class="about-role" id="about-role">GIS &amp Remote Sensing Engineering Student.</p>
-          <p class="about-focus" id="about-focus">Focus: Currently mapping disaster impact, watershed hydrology, CMIP6 climate projections, building web maps and dynamic QGIS plugins</p>
-          <p class="about-goal" id="about-goal">Goal: To grow into the role of someone who can use GIS to aid in solving real-world environmental and climate challenges.</p>
+          <p class="about-role" id="about-role">GIS &amp; Remote Sensing Researcher</p>
+          <p class="about-focus" id="about-focus">Currently mapping land, water, and climate change across two research internships.</p>
+          <p class="about-goal" id="about-goal">Next stop: a Mitacs Globalink internship applying GIS to climate-change research.</p>
         </div>
       </div>
 
       <div class="identity">
         <p class="eyebrow">Field Journal No. 01</p>
         <h1 id="display-name">Your Name</h1>
-        <p class="tagline">Studying land, climate, and everything in between.</p>
+        <p class="tagline">Mapping land, water, and climate — one layer at a time.</p>
       </div>
 
       <div class="stat-banner" id="stat-banner">
@@ -93,14 +102,14 @@
         <div class="stat-divider"></div>
         <div class="stat">
           <svg class="stamp" viewBox="0 0 40 40"><rect x="3" y="3" width="34" height="34" rx="3"/><circle cx="20" cy="20" r="10"/></svg>
-          <span class="stat-num" id="stat-followers">—</span>
-          <span class="stat-label">Followers</span>
+          <span class="stat-num" id="stat-commits">—</span>
+          <span class="stat-label">Total Commits</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat">
           <svg class="stamp" viewBox="0 0 40 40"><rect x="3" y="3" width="34" height="34" rx="3"/><circle cx="20" cy="20" r="10"/></svg>
-          <span class="stat-num" id="stat-hours">—</span>
-          <span class="stat-label">Contribution Hrs</span>
+          <span class="stat-num" id="stat-contrib">—</span>
+          <span class="stat-label">This Year</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat">
@@ -134,11 +143,18 @@
     <div class="section-head">
       <p class="eyebrow">Toolkit</p>
       <h2>Instruments</h2>
-      <p class="section-sub">Tools carried into the field.</p>
+      <p class="section-sub">Software and platforms carried into the field.</p>
     </div>
-    <div class="instrument-list" id="instrument-list">
-      <!-- filled via config in script.js -->
+    <div class="instrument-list" id="toolkit-list"></div>
+  </section>
+
+  <section id="methods" class="section">
+    <div class="section-head">
+      <p class="eyebrow">Field Techniques</p>
+      <h2>Methods</h2>
+      <p class="section-sub">The analytical work behind the notes.</p>
     </div>
+    <div class="instrument-list" id="methods-list"></div>
   </section>
 
   <!-- ============ LANGUAGES / LEGEND ============ -->

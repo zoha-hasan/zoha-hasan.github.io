@@ -22,6 +22,7 @@
 *{ box-sizing: border-box; }
 html{
   scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
 }
 body{
   margin: 0;
@@ -53,12 +54,9 @@ a{ color: var(--sienna); }
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.05;
-  background-image:
-    repeating-radial-gradient(circle at 20% 30%, transparent 0 34px, var(--mahogany) 35px, transparent 36px, transparent 70px),
-    repeating-radial-gradient(circle at 80% 70%, transparent 0 44px, var(--moss) 45px, transparent 46px, transparent 90px);
-  background-size: 900px 900px, 1100px 1100px;
+  opacity: 0.07;
 }
+.topo-bg svg{ display: block; }
 
 /* faint dotted route line tying sections together (static, not animated) */
 .route-line{
@@ -155,6 +153,16 @@ main{ position: relative; z-index: 1; }
   display: flex;
   flex-direction: column;
   justify-content: center;
+  scroll-snap-align: start;
+}
+/* Hero is fully sealed to one screen — nothing below peeks through
+   until the visitor actually scrolls past it. */
+.section.hero{
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  padding-top: 90px;
+  padding-bottom: 40px;
 }
 .section-head{
   text-align: center;
@@ -193,7 +201,8 @@ h2{ font-size: clamp(2rem, 4vw, 2.6rem); }
 }
 .compass-ring{
   position: relative;
-  width: 180px; height: 180px;
+  width: clamp(200px, 24vw, 260px);
+  height: clamp(200px, 24vw, 260px);
 }
 .compass-face, .compass-needle{
   position: absolute;
@@ -234,7 +243,8 @@ h2{ font-size: clamp(2rem, 4vw, 2.6rem); }
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%,-50%);
-  width: 108px; height: 108px;
+  width: clamp(120px, 15vw, 155px);
+  height: clamp(120px, 15vw, 155px);
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid var(--paper);
@@ -242,15 +252,65 @@ h2{ font-size: clamp(2rem, 4vw, 2.6rem); }
   background: var(--paper-soft);
 }
 
-.compass-wrap:hover .compass-needle,
-.compass-wrap:focus-visible .compass-needle,
+/* Idle wobble on hover hints that the compass is interactive,
+   without giving away the about-card until it's actually tapped. */
+.compass-wrap:hover:not(.active) .compass-needle,
+.compass-wrap:focus-visible:not(.active) .compass-needle{
+  transform: rotate(-14deg);
+}
 .compass-wrap.active .compass-needle{
   transform: rotate(48deg);
 }
 
+/* Hanging specimen-tag hint — appears on hover, invites the tap */
+.compass-hint{
+  position: absolute;
+  top: -6px;
+  right: -18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(-4px) rotate(-6deg);
+  transition: opacity .3s var(--ease), transform .3s var(--ease);
+  pointer-events: none;
+  z-index: 15;
+}
+.hint-string{
+  width: 1px;
+  height: 14px;
+  background: var(--sienna);
+  opacity: .6;
+}
+.hint-label{
+  font-family: var(--font-body);
+  font-size: .72rem;
+  letter-spacing: .03em;
+  color: var(--mahogany);
+  background: var(--paper-soft);
+  border: 1px solid rgba(92,42,30,0.3);
+  border-radius: 3px;
+  padding: 4px 9px;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(58,58,46,0.14);
+  animation: hint-sway 2.6s ease-in-out infinite;
+}
+@keyframes hint-sway{
+  0%,100%{ transform: rotate(-3deg); }
+  50%{ transform: rotate(3deg); }
+}
+.compass-wrap:hover .compass-hint,
+.compass-wrap:focus-visible .compass-hint{
+  opacity: 1;
+  transform: translateY(0) rotate(-6deg);
+}
+.compass-wrap.active .compass-hint{
+  opacity: 0;
+}
+
 .about-card{
   position: absolute;
-  top: 210px;
+  top: calc(100% + 14px);
   left: 50%;
   transform: translate(-50%, -12px);
   width: 300px;
@@ -265,8 +325,6 @@ h2{ font-size: clamp(2rem, 4vw, 2.6rem); }
   transition: opacity .35s var(--ease), transform .35s var(--ease), visibility .35s;
   z-index: 20;
 }
-.compass-wrap:hover .about-card,
-.compass-wrap:focus-visible .about-card,
 .compass-wrap.active .about-card{
   opacity: 1;
   visibility: visible;
