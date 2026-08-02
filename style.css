@@ -111,10 +111,33 @@ body::before{
 .journal-card{
   position: relative;
   width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
   border-radius: 6px;
-  padding: 34px clamp(22px, 5vw, 48px) 30px 56px;
+  padding: 30px clamp(22px, 5vw, 44px) 28px 52px;
   box-shadow: 0 18px 40px rgba(23,48,31,0.22), 0 1px 0 rgba(255,255,255,0.4) inset;
   background-repeat: repeat;
+  transform: rotate(-0.3deg);
+}
+.hero-card{ transform: rotate(0.4deg); }
+
+/* a strip of "washi tape" holding the card down — the handmade touch */
+.journal-card .tape{
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 90px;
+  height: 26px;
+  background: repeating-linear-gradient(45deg, rgba(199,154,60,0.55) 0 6px, rgba(168,80,31,0.4) 6px 12px);
+  opacity: .85;
+  box-shadow: 0 3px 6px rgba(23,48,31,0.25);
+  z-index: 5;
+}
+.journal-card .tape::before{
+  content: "";
+  position: absolute; inset: 0;
+  background: rgba(255,255,255,0.12);
 }
 
 /* Light card (used on dark pine sections) */
@@ -262,17 +285,16 @@ body::before{
    ============================================================ */
 main{ position: relative; z-index: 1; }
 .section{
+  width: 100%;
   min-height: 100vh;
-  padding: 70px 24px;
-  max-width: 1080px;
-  margin: 0 auto;
+  padding: 60px 24px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   scroll-snap-align: start;
 }
-.section-inner{ max-width: 720px; margin: 0 auto; width: 100%; }
-.section.hero{ padding: 90px 24px; }
+.section.hero{ padding: 60px 24px; }
 .section-head{
   text-align: center;
   max-width: 560px;
@@ -280,13 +302,29 @@ main{ position: relative; z-index: 1; }
 }
 .eyebrow{
   font-family: var(--font-label);
-  font-size: .68rem;
-  letter-spacing: .14em;
+  font-size: .72rem;
+  letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--rust);
   margin-bottom: .7em;
 }
-h2{ font-size: clamp(1.9rem, 4vw, 2.4rem); }
+h2{
+  font-size: clamp(1.9rem, 4vw, 2.4rem);
+  position: relative;
+  display: inline-block;
+}
+h2::after{
+  content: "";
+  display: block;
+  width: 84px;
+  height: 8px;
+  margin: 6px auto 0;
+  background: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 84 8'%3E%3Cpath d='M2 5.5c14-6 20 4 34-1s20 5 46-1' fill='none' stroke='%23A8501F' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E");
+  opacity: .8;
+}
+.journal-card--dark h2::after{
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 84 8'%3E%3Cpath d='M2 5.5c14-6 20 4 34-1s20 5 46-1' fill='none' stroke='%23C79A3C' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E");
+}
 .section-sub{
   color: var(--ink-soft);
   opacity: .85;
@@ -305,7 +343,7 @@ h2{ font-size: clamp(1.9rem, 4vw, 2.4rem); }
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .compass-wrap{
@@ -355,15 +393,16 @@ h2{ font-size: clamp(1.9rem, 4vw, 2.4rem); }
   background: var(--paper-deep);
 }
 
-/* bookmark tab: attached at SE of the compass ring, with a small arrow cue */
+/* bookmark tab: attached at NE of the compass ring, with a small arrow cue
+   pointing back down at the compass so it reads as "tap here" */
 .compass-bookmark{
   position: absolute;
-  bottom: 2%;
-  right: -6%;
-  width: 22px;
+  top: -8%;
+  right: -8%;
+  width: 24px;
   height: 46px;
   background: var(--rust);
-  clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%);
   box-shadow: 0 4px 10px rgba(23,48,31,0.3);
   transition: transform .35s var(--ease), background .3s var(--ease);
   z-index: 15;
@@ -371,23 +410,21 @@ h2{ font-size: clamp(1.9rem, 4vw, 2.4rem); }
 }
 .bookmark-arrow{
   position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%,-60%);
-  width: 9px; height: 9px;
-  border-right: 2px solid var(--paper);
-  border-bottom: 2px solid var(--paper);
-  transform-origin: center;
-  rotate: 45deg;
+  top: 40%; left: 50%;
+  width: 11px; height: 11px;
+  border-left: 2.5px solid var(--paper);
+  border-bottom: 2.5px solid var(--paper);
+  transform: translate(-50%,-50%) rotate(-45deg);
   animation: arrow-nudge 1.6s ease-in-out infinite;
 }
 @keyframes arrow-nudge{
-  0%,100%{ transform: translate(-50%,-60%) rotate(45deg); }
-  50%{ transform: translate(-40%,-50%) rotate(45deg); }
+  0%,100%{ transform: translate(-50%,-50%) rotate(-45deg); }
+  50%{ transform: translate(-50%,-38%) rotate(-45deg); }
 }
 .compass-wrap:hover .compass-bookmark,
 .compass-wrap:focus-visible .compass-bookmark,
 .compass-wrap.active .compass-bookmark{
-  transform: rotate(8deg) translate(3px, 2px);
+  transform: rotate(-6deg) translate(-2px, 2px);
   background: var(--gold);
 }
 
@@ -487,8 +524,8 @@ h2{ font-size: clamp(1.9rem, 4vw, 2.4rem); }
 @media (max-width: 560px){ .stat-divider{ display: none; } }
 
 .field-log{
-  font-family: var(--font-label);
-  font-size: .8rem;
+  font-style: italic;
+  font-size: .85rem;
   color: var(--ink-soft);
   opacity: .8;
 }
@@ -622,26 +659,37 @@ h2{ font-size: clamp(1.9rem, 4vw, 2.4rem); }
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
-  max-width: 700px;
+  align-items: center;
+  gap: 8px 10px;
+  max-width: 660px;
   margin: 0 auto;
 }
+/* each tag gets its own small hand-placed tilt and vertical jitter,
+   like specimen labels pinned to a corkboard rather than a form's chip row */
 .instrument-chip{
   display: inline-flex;
   align-items: center;
   gap: 7px;
   background: rgba(243,234,212,0.08);
   border: 1px solid rgba(199,154,60,0.35);
-  border-radius: 999px;
-  padding: 9px 16px;
-  font-size: .85rem;
+  border-radius: 3px;
+  padding: 8px 14px;
+  font-size: .84rem;
   color: var(--cream-ink);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
   transition: box-shadow .25s var(--ease), transform .25s var(--ease), background .25s var(--ease);
 }
+.instrument-chip:nth-child(6n+1){ transform: rotate(-2.5deg) translateY(2px); }
+.instrument-chip:nth-child(6n+2){ transform: rotate(1.5deg) translateY(-2px); }
+.instrument-chip:nth-child(6n+3){ transform: rotate(-1deg); }
+.instrument-chip:nth-child(6n+4){ transform: rotate(2deg) translateY(3px); }
+.instrument-chip:nth-child(6n+5){ transform: rotate(-1.8deg) translateY(-1px); }
+.instrument-chip:nth-child(6n+6){ transform: rotate(1deg); }
 .instrument-chip:hover{
-  box-shadow: 0 0 14px rgba(199,154,60,0.35);
-  transform: translateY(-2px);
-  background: rgba(199,154,60,0.14);
+  box-shadow: 0 0 14px rgba(199,154,60,0.4), 0 6px 14px rgba(0,0,0,0.2);
+  transform: rotate(0deg) translateY(-3px) scale(1.04) !important;
+  background: rgba(199,154,60,0.16);
+  z-index: 2;
 }
 .instrument-chip .dot{
   width: 6px; height: 6px;
@@ -656,8 +704,8 @@ h2{ font-size: clamp(1.9rem, 4vw, 2.4rem); }
 }
 .journal-card--light .instrument-chip .dot{ background: var(--rust); }
 .journal-card--light .instrument-chip:hover{
-  background: rgba(168,80,31,0.12);
-  box-shadow: 0 0 14px rgba(168,80,31,0.25);
+  background: rgba(168,80,31,0.14);
+  box-shadow: 0 0 14px rgba(168,80,31,0.3), 0 6px 14px rgba(0,0,0,0.1);
 }
 
 /* ============================================================

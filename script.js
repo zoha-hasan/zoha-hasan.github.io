@@ -193,7 +193,7 @@ async function loadRepos(){
       const title = formatRepoName(repo.name);
       const desc = excerpts[i]
         || repo.description
-        || "A field note in progress, details coming soon.";
+        || "A field note in progress.. details coming soon.";
       const tags = [repo.language, ...(repo.topics || [])]
         .filter(Boolean)
         .slice(0, 4);
