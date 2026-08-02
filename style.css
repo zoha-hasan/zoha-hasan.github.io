@@ -65,6 +65,32 @@ body::before{
   mix-blend-mode: multiply;
 }
 
+/* Quiet corner charm — map-style crosshair ticks, so the margins around
+   the cards feel like part of a survey page instead of empty void */
+.corner-mark{
+  position: fixed;
+  width: 26px; height: 26px;
+  opacity: .28;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+.corner-mark svg{ width: 100%; height: 100%; stroke: var(--rust); fill: none; stroke-width: 1.4; }
+.corner-mark.tl{ top: 22px; left: 22px; }
+.corner-mark.br{ bottom: 22px; right: 22px; transform: rotate(180deg); }
+
+/* a soft fern sprig anchored bottom-left of the whole page, barely-there */
+.fern-mark{
+  position: fixed;
+  bottom: -10px; left: -10px;
+  width: 130px; height: 130px;
+  opacity: .1;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+.fern-mark svg{ width: 100%; height: 100%; stroke: var(--pine-soft); fill: none; stroke-width: 1.3; }
+
 /* ============================================================
    ROUTE LINE — dashed trail + travelling compass pin
    ============================================================ */
@@ -73,16 +99,18 @@ body::before{
   top: 100vh;
   bottom: 220px;
   left: 50%;
-  width: 2px;
-  background-image: repeating-linear-gradient(to bottom, var(--rust) 0 7px, transparent 7px 18px);
-  opacity: 0.55;
+  width: 26px;
+  margin-left: -13px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='60'%3E%3Cpath d='M13 0 C 22 10, 22 15, 13 22 S 4 34, 13 40 S 22 52, 13 60' fill='none' stroke='%23A8501F' stroke-width='2' stroke-dasharray='2 8' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-y;
+  opacity: 0.5;
   z-index: 0;
   pointer-events: none;
-  animation: route-flow 4.5s linear infinite;
+  animation: route-flow 6s linear infinite;
 }
 @keyframes route-flow{
   from{ background-position: 0 0; }
-  to{ background-position: 0 25px; }
+  to{ background-position: 0 60px; }
 }
 .route-pin{
   position: absolute;
@@ -294,7 +322,7 @@ main{ position: relative; z-index: 1; }
   justify-content: center;
   scroll-snap-align: start;
 }
-.section.hero{ padding: 60px 24px; }
+.section.hero{ padding: 40px 24px; }
 .section-head{
   text-align: center;
   max-width: 560px;
@@ -343,18 +371,18 @@ h2::after{
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .compass-wrap{
   position: relative;
   cursor: pointer;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 .compass-ring{
   position: relative;
-  width: clamp(160px, 20vw, 190px);
-  height: clamp(160px, 20vw, 190px);
+  width: clamp(140px, 17vw, 168px);
+  height: clamp(140px, 17vw, 168px);
 }
 .compass-face, .compass-needle{
   position: absolute;
@@ -397,7 +425,7 @@ h2::after{
    pointing back down at the compass so it reads as "tap here" */
 .compass-bookmark{
   position: absolute;
-  top: -8%;
+  top: -2%;
   right: -8%;
   width: 24px;
   height: 46px;
@@ -490,7 +518,7 @@ h2::after{
   background: var(--paper-deep);
   border: 1px solid rgba(168,80,31,0.22);
   border-radius: var(--radius);
-  padding: 14px 22px;
+  padding: 12px 22px;
 }
 .stat{
   display: flex;
@@ -679,12 +707,12 @@ h2::after{
   box-shadow: 0 3px 8px rgba(0,0,0,0.15);
   transition: box-shadow .25s var(--ease), transform .25s var(--ease), background .25s var(--ease);
 }
-.instrument-chip:nth-child(6n+1){ transform: rotate(-2.5deg) translateY(2px); }
-.instrument-chip:nth-child(6n+2){ transform: rotate(1.5deg) translateY(-2px); }
-.instrument-chip:nth-child(6n+3){ transform: rotate(-1deg); }
-.instrument-chip:nth-child(6n+4){ transform: rotate(2deg) translateY(3px); }
-.instrument-chip:nth-child(6n+5){ transform: rotate(-1.8deg) translateY(-1px); }
-.instrument-chip:nth-child(6n+6){ transform: rotate(1deg); }
+.instrument-chip:nth-child(6n+1){ transform: rotate(-1.1deg); }
+.instrument-chip:nth-child(6n+2){ transform: rotate(0.8deg); }
+.instrument-chip:nth-child(6n+3){ transform: rotate(-0.5deg); }
+.instrument-chip:nth-child(6n+4){ transform: rotate(1deg); }
+.instrument-chip:nth-child(6n+5){ transform: rotate(-0.8deg); }
+.instrument-chip:nth-child(6n+6){ transform: rotate(0.5deg); }
 .instrument-chip:hover{
   box-shadow: 0 0 14px rgba(199,154,60,0.4), 0 6px 14px rgba(0,0,0,0.2);
   transform: rotate(0deg) translateY(-3px) scale(1.04) !important;
