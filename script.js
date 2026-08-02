@@ -193,7 +193,7 @@ async function loadRepos(){
       const title = formatRepoName(repo.name);
       const desc = excerpts[i]
         || repo.description
-        || "A field note in progress — details coming soon.";
+        || "A field note in progress, details coming soon.";
       const tags = [repo.language, ...(repo.topics || [])]
         .filter(Boolean)
         .slice(0, 4);
@@ -281,7 +281,7 @@ function renderChipList(containerId, items){
 }
 
 /* ============================================================
-   UI BEHAVIOR — nav, scroll progress, scroll-spy, compass touch
+   UI BEHAVIOR — nav, scroll progress, scroll-spy, compass touch, route pin
    ============================================================ */
 function initNav(){
   const buttons = document.querySelectorAll(".nav-btn");
@@ -306,12 +306,30 @@ function initNav(){
 
 function initScrollProgress(){
   const bar = document.getElementById("scroll-progress");
-  window.addEventListener("scroll", () => {
+  const pin = document.getElementById("route-pin");
+  const routeLine = document.querySelector(".route-line");
+
+  function update(){
     const scrollTop = window.scrollY;
     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
     const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
     bar.style.width = pct + "%";
-  }, { passive: true });
+
+    // Move the travelling pin along the dotted route line, marking
+    // roughly where the reader currently is in the journal.
+    if (pin && routeLine){
+      const lineTop = routeLine.offsetTop;
+      const lineBottom = lineTop + routeLine.offsetHeight;
+      const viewportCenter = scrollTop + window.innerHeight / 2;
+      const clamped = Math.min(Math.max(viewportCenter, lineTop), lineBottom);
+      pin.style.top = clamped + "px";
+      pin.classList.toggle("visible", viewportCenter > lineTop + 20 && viewportCenter < lineBottom - 20);
+    }
+  }
+
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+  update();
 }
 
 function initCompassTouch(){

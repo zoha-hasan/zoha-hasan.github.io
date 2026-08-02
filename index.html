@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Field Journal</title>
-<meta name="description" content="Field journal profile — GIS, climate analysis, and spatial exploration.">
+<meta name="description" content="Field journal: GIS, climate analysis, and spatial exploration.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Special+Elite&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
 </head>
@@ -17,8 +17,11 @@
 <!-- Scroll progress -->
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<!-- Faint route line connecting sections -->
+<!-- Faint route line connecting sections, with a travelling pin -->
 <div class="route-line" aria-hidden="true"></div>
+<div class="route-pin" id="route-pin" aria-hidden="true">
+  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>
+</div>
 
 <!-- Fixed bottom section nav -->
 <nav class="bottom-nav" aria-label="Section navigation">
@@ -47,8 +50,9 @@
 <main>
 
   <!-- ============ PROFILE / HERO ============ -->
-  <section id="profile" class="section hero">
-    <div class="journal-card journal-card--mahogany">
+  <section id="profile" class="section hero section--pine">
+    <div class="journal-card journal-card--light hero-card">
+      <span class="punch" aria-hidden="true"></span>
       <div class="hero-inner">
 
         <div class="compass-wrap" id="compass-wrap" tabindex="0" role="button" aria-expanded="false" aria-label="Tap to show about me">
@@ -70,7 +74,7 @@
               <circle cx="60" cy="60" r="4.5" class="needle-pin"/>
             </svg>
             <img class="avatar" id="avatar" src="" alt="Profile photo">
-            <span class="compass-bookmark" aria-hidden="true"></span>
+            <span class="compass-bookmark" aria-hidden="true"><span class="bookmark-arrow"></span></span>
           </div>
 
           <div class="about-card" id="about-card">
@@ -111,18 +115,19 @@
             <span class="stat-label">Joined</span>
           </div>
         </div>
-        
+
         <p class="field-log">Field Log Last updated: <span id="last-updated">—</span></p>
         <a class="scroll-cue" href="#field-notes" aria-label="Scroll to Field Notes">
           <span></span>
         </a>
       </div>
-    </div>  
+    </div>
   </section>
 
-  <!-- ============ FIELD NOTES / PROJECTS ============ -->  
-  <section id="field-notes" class="section">
-    <div class="journal-card journal-card--moss">
+  <!-- ============ FIELD NOTES / PROJECTS ============ -->
+  <section id="field-notes" class="section section--cream">
+    <div class="journal-card journal-card--dark">
+      <span class="punch" aria-hidden="true"></span>
       <div class="section-head">
         <p class="eyebrow">Dispatches</p>
         <h2>Field Notes</h2>
@@ -136,8 +141,9 @@
   </section>
 
   <!-- ============ INSTRUMENTS / SKILLS ============ -->
-  <section id="instruments" class="section">
-    <div class="journal-card journal-card--sky">
+  <section id="instruments" class="section section--pine">
+    <div class="journal-card journal-card--light">
+      <span class="punch" aria-hidden="true"></span>
       <div class="section-head">
         <p class="eyebrow">Toolkit</p>
         <h2>Instruments</h2>
@@ -146,22 +152,24 @@
       <div class="instrument-list" id="toolkit-list"></div>
     </div>
   </section>
-  
-  <section id="methods" class="section">
-    <div class="journal-card journal-card--mahogany">
+
+  <section id="methods" class="section section--cream">
+    <div class="journal-card journal-card--dark">
+      <span class="punch" aria-hidden="true"></span>
       <div class="section-head">
         <p class="eyebrow">Field Techniques</p>
         <h2>Methods</h2>
         <p class="section-sub">The analytical work behind the notes.</p>
       </div>
       <div class="instrument-list" id="methods-list"></div>
-    </div>  
-  </section>  
- 
+    </div>
+  </section>
+
 
   <!-- ============ LANGUAGES / LEGEND ============ -->
-  <section id="languages" class="section">
-    <div class="journal-card journal-card--moss">
+  <section id="languages" class="section section--pine">
+    <div class="journal-card journal-card--light">
+      <span class="punch" aria-hidden="true"></span>
       <div class="section-head">
         <p class="eyebrow">Map Key</p>
         <h2>Legend</h2>
@@ -170,11 +178,12 @@
       <div class="legend-bars" id="lang-bars">
         <p class="loading-msg" id="lang-loading">Surveying the terrain…</p>
       </div>
-    </div>  
+    </div>
   </section>
 
   <footer class="site-footer">
-    <p class="footer-note">Still updating field notes.</p>
+    <p class="field-log-footer">Still updating field notes.</p>
+    <p class="footer-note">Built &amp; maintained from the field.</p>
   </footer>
 
 </main>
