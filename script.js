@@ -181,7 +181,6 @@ async function loadRepos(){
       return;
     }
 
-    // Most recently pushed repo drives the footer "Field Log" date
     const mostRecent = repos.reduce((a, b) => new Date(a.pushed_at) > new Date(b.pushed_at) ? a : b);
     document.getElementById("last-updated").textContent = formatFullDate(mostRecent.pushed_at);
 
@@ -272,70 +271,6 @@ async function loadLanguages(repos){
 }
 
 /* ============================================================
-   AMBIENT BACKGROUND — hand-drawn-style topographic contours
-   ============================================================ */
-// Smooth a ring of points into a closed, organic loop (Catmull-Rom -> Bezier).
-function smoothClosedPath(points){
-  const n = points.length;
-  let d = `M ${points[0][0].toFixed(1)},${points[0][1].toFixed(1)} `;
-  for (let i = 0; i < n; i++){
-    const p0 = points[(i - 1 + n) % n];
-    const p1 = points[i];
-    const p2 = points[(i + 1) % n];
-    const p3 = points[(i + 2) % n];
-    const c1x = p1[0] + (p2[0] - p0[0]) / 6;
-    const c1y = p1[1] + (p2[1] - p0[1]) / 6;
-    const c2x = p2[0] - (p3[0] - p1[0]) / 6;
-    const c2y = p2[1] - (p3[1] - p1[1]) / 6;
-    d += `C ${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)} `;
-  }
-  return d + "Z";
-}
-
-// One irregular blob outline — a real elevation contour, not a circle.
-function contourRing(cx, cy, baseRadius, wobble, pointCount){
-  const pts = [];
-  for (let i = 0; i < pointCount; i++){
-    const angle = (i / pointCount) * Math.PI * 2;
-    const r = baseRadius + (Math.random() * 2 - 1) * wobble;
-    pts.push([cx + Math.cos(angle) * r, cy + Math.sin(angle) * r]);
-  }
-  return smoothClosedPath(pts);
-}
-
-// A cluster of nested, irregular contour rings (like a hill on a topo map).
-function contourCluster(cx, cy, ringCount, baseRadius, color){
-  let markup = "";
-  for (let i = 0; i < ringCount; i++){
-    const shrink = 1 - (i / ringCount) * 0.75;
-    const r = baseRadius * shrink;
-    const wobble = baseRadius * (0.08 + Math.random() * 0.1);
-    const strokeWidth = (0.7 + Math.random() * 1.5).toFixed(2);
-    const opacity = (0.4 + Math.random() * 0.6).toFixed(2);
-    const jitterX = (Math.random() * 16 - 8);
-    const jitterY = (Math.random() * 16 - 8);
-    const d = contourRing(cx + jitterX, cy + jitterY, r, wobble, 8 + Math.floor(Math.random() * 5));
-    markup += `<path d="${d}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" opacity="${opacity}"/>`;
-  }
-  return markup;
-}
-
-function initTopoBackground(){
-  const container = document.querySelector(".topo-bg");
-  if (!container) return;
-  const w = 1600, h = 1200;
-  const mahogany = "#5C2A1E", moss = "#5B7B4F";
-
-  let inner = "";
-  inner += contourCluster(260, 260, 4, 190, mahogany);
-  inner += contourCluster(1280, 380, 4, 220, moss);
-  inner += contourCluster(680, 980, 3, 160, mahogany);
-  inner += contourCluster(1400, 1050, 3, 180, moss);
-
-  container.innerHTML = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">${inner}</svg>`;
-}
-
-/* ============================================================
    STATIC CONTENT — instruments
    ============================================================ */
 function renderChipList(containerId, items){
@@ -381,7 +316,6 @@ function initScrollProgress(){
 
 function initCompassTouch(){
   // Click/tap is the primary trigger on every device — hover only shows
-  // the small hint tag, so mouse and touch behave the same way.
   const wrap = document.getElementById("compass-wrap");
   wrap.addEventListener("click", () => {
     const isActive = wrap.classList.toggle("active");
@@ -399,7 +333,6 @@ function initCompassTouch(){
    INIT
    ============================================================ */
 document.addEventListener("DOMContentLoaded", () => {
-  initTopoBackground();
   renderChipList("toolkit-list", TOOLKIT);
   renderChipList("methods-list", METHODS);
   initNav();
