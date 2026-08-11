@@ -4,10 +4,8 @@
 const GITHUB_USERNAME = "zoha-hasan"; // <-- change this
 
 // Override auto-formatted names for specific repos.
-// key = exact repo name on GitHub, value = display name.
 const CUSTOM_REPO_NAMES = {
   "lulc_plugin_qgis": "QGIS LULC Plugin",
-  // "your-repo-name": "Your Display Name",
 };
 
 // Acronyms that should stay fully uppercase when auto-formatting names.
@@ -16,7 +14,7 @@ const ACRONYMS = [
   "css","html","js","json","cnn","ndvi","dem","crs","sql","geojson","ui","ux"
 ];
 
-// Repos to hide from the Field Notes grid (config repos, forks you don't want shown, etc.)
+// Repos to hide from the Field Notes grid
 const HIDE_REPOS = [GITHUB_USERNAME + "." + "github.io"];
 
 // Software/platforms GitHub can't detect on its own
@@ -59,7 +57,6 @@ function formatFullDate(iso){
   return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 }
 
-// Pull a short, readable excerpt straight from a repo's README.
 async function fetchReadmeExcerpt(repoName){
   try{
     const res = await fetch(
@@ -74,20 +71,17 @@ async function fetchReadmeExcerpt(repoName){
   }
 }
 
-// Strip markdown noise (images, badges, headers, links, code fences) and
-// return the first real sentence-length line, trimmed to ~140 chars.
 function extractExcerpt(markdown){
   const lines = markdown.split(/\r?\n/);
   for (let line of lines){
     if (/^\s*```/.test(line)) continue;
     const clean = line
-      .replace(/!\[[^\]]*\]\([^)]*\)/g, "")      // images
-      .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")    // [text](url) -> text
-      .replace(/<[^>]+>/g, "")                    // stray html
-      .replace(/^#+\s*/, "")                      // headers
-      .replace(/[*_`>]/g, "")                     // md emphasis chars
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+      .replace(/<[^>]+>/g, "")
+      .replace(/^#+\s*/, "")
+      .replace(/[*_`>]/g, "")
       .trim();
-    // skip empty lines, badge-only lines, or anything too short to be a real sentence
     if (clean.length > 25 && !/^!\[/.test(line)){
       return clean.length > 140 ? clean.slice(0, 137).trim() + "…" : clean;
     }
@@ -95,8 +89,6 @@ function extractExcerpt(markdown){
   return null;
 }
 
-// Total commit count for one repo, via the Link-header page-count trick
-// (avoids paging through every commit just to count them).
 async function fetchCommitCount(repoName){
   try{
     const res = await fetch(
@@ -115,9 +107,6 @@ async function fetchCommitCount(repoName){
   }
 }
 
-// Sums commit counts across all owned, non-fork repos.
-// Note: only counts commits in repos you own — not commits made
-// as a contributor to other people's repos.
 async function loadTotalCommits(repos){
   try{
     const counts = await Promise.all(repos.map(r => fetchCommitCount(r.name)));
@@ -128,8 +117,6 @@ async function loadTotalCommits(repos){
   }
 }
 
-// Uses the public, unauthenticated jogruber contributions API
-// (scrapes the same data your profile's contribution graph shows).
 async function loadContributionsThisYear(){
   try{
     const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=last`);
@@ -184,7 +171,6 @@ async function loadRepos(){
     const mostRecent = repos.reduce((a, b) => new Date(a.pushed_at) > new Date(b.pushed_at) ? a : b);
     document.getElementById("last-updated").textContent = formatFullDate(mostRecent.pushed_at);
 
-    // README excerpt > About description > generic fallback, fetched in parallel
     const excerpts = await Promise.all(
       repos.map(repo => fetchReadmeExcerpt(repo.name))
     );
@@ -221,7 +207,7 @@ async function loadLanguages(repos){
   const container = document.getElementById("lang-bars");
   const loadingEl = document.getElementById("lang-loading");
   try{
-    const subset = repos.slice(0, 12); // keep API calls reasonable
+    const subset = repos.slice(0, 12);
     const results = await Promise.all(
       subset.map(r => fetch(r.languages_url).then(res => res.ok ? res.json() : {}).catch(() => ({})))
     );
@@ -256,7 +242,6 @@ async function loadLanguages(repos){
       `;
     }).join("");
 
-    // trigger width transition after paint
     requestAnimationFrame(() => {
       document.querySelectorAll(".legend-fill").forEach(el => {
         const w = el.style.width;
@@ -281,7 +266,7 @@ function renderChipList(containerId, items){
 }
 
 /* ============================================================
-   UI BEHAVIOR — nav, scroll progress, scroll-spy, compass touch, route pin
+   UI BEHAVIOR — nav, scroll progress, scroll-spy, compass touch, route pin, vine growth
    ============================================================ */
 function initNav(){
   const buttons = document.querySelectorAll(".nav-btn");
@@ -308,6 +293,12 @@ function initScrollProgress(){
   const bar = document.getElementById("scroll-progress");
   const pin = document.getElementById("route-pin");
   const routeLine = document.querySelector(".route-line");
+  const vinePath = document.getElementById("vine-path");
+  const vineLength = vinePath ? vinePath.getTotalLength() : 0;
+  if (vinePath){
+    vinePath.style.strokeDasharray = vineLength;
+    vinePath.style.strokeDashoffset = vineLength;
+  }
 
   function update(){
     const scrollTop = window.scrollY;
@@ -315,8 +306,10 @@ function initScrollProgress(){
     const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
     bar.style.width = pct + "%";
 
-    // Move the travelling pin along the dotted route line, marking
-    // roughly where the reader currently is in the journal.
+    if (vinePath && vineLength){
+      vinePath.style.strokeDashoffset = vineLength - (vineLength * (pct / 100));
+    }
+
     if (pin && routeLine){
       const lineTop = routeLine.offsetTop;
       const lineBottom = lineTop + routeLine.offsetHeight;
@@ -333,7 +326,6 @@ function initScrollProgress(){
 }
 
 function initCompassTouch(){
-  // Click/tap is the primary trigger on every device — hover only shows
   const wrap = document.getElementById("compass-wrap");
   wrap.addEventListener("click", () => {
     const isActive = wrap.classList.toggle("active");
