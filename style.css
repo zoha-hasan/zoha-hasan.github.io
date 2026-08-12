@@ -460,13 +460,13 @@ h2::after{
 }
 .hint-note{
   font-family: var(--font-label);
-  font-size: .62rem; letter-spacing: .06em; text-transform: uppercase;
-  opacity: .55; color: var(--ink-soft); text-align: center; margin-top: -4px;
+  font-size: .74rem; letter-spacing: .05em; text-transform: uppercase;
+  opacity: .75; color: var(--ink-soft); text-align: center; margin-top: -4px;
 }
 
 .about-card{
   position: absolute;
-  top: 55%;
+  top: 65%;
   left: 50%;
   transform: translate(-50%, -50%) scale(.92);
   width: 250px;
