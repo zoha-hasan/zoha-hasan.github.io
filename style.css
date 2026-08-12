@@ -124,6 +124,20 @@ body::before{
   .margin-vine, .specimen-field{ display: block; }
 }
 
+.cert-list{ display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px 10px; max-width: 640px; margin: 0 auto; }
+.cert-overlay{
+  position: absolute; inset: 0;
+  background: var(--pine-2);
+  display: flex; align-items: center; justify-content: center;
+  padding: 26px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s var(--ease);
+  z-index: 6;
+}
+.cert-overlay.active{ opacity: 1; pointer-events: auto; }
+.cert-overlay img{ max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px; box-shadow: 0 14px 34px rgba(0,0,0,0.55); }
+
+
 /* ============================================================
    ROUTE LINE — dashed trail + travelling compass pin (kept, dimmer)
    ============================================================ */
@@ -206,7 +220,7 @@ body::before{
 .pin-card-inner::after{
   content: "";
   position: absolute;
-  left: -2%; right: -2%;
+  left: 0%; right: 0%;
   height: 9px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='9' viewBox='0 0 40 9'%3E%3Cpolygon points='0,9 4,2 8,7 13,1 18,8 23,2 28,7 33,1 37,6 40,3 40,9' fill='%23F1E4C4'/%3E%3C/svg%3E");
   background-repeat: repeat-x;
@@ -420,12 +434,23 @@ h2::after{
   background: var(--gold);
 }
 
+.compass-hint{
+  font-family: var(--font-label);
+  font-size: .6rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-soft); opacity: .55; margin: 6px 0 0;
+}
+.hint-note{
+  font-family: var(--font-label);
+  font-size: .62rem; letter-spacing: .06em; text-transform: uppercase;
+  opacity: .55; color: var(--ink-soft); text-align: center; margin-top: -4px;
+}
+
 .about-card{
   position: absolute;
-  bottom: calc(100% + 14px);
+  top: 44%;
   left: 50%;
-  transform: translate(-50%, 10px);
-  width: 270px;
+  transform: translate(-50%, -50%) scale(.92);
+  width: 250px;
   background: var(--pine-2);
   border: 1px solid rgba(210,162,78,0.4);
   border-radius: var(--radius);
@@ -434,14 +459,14 @@ h2::after{
   box-shadow: 0 14px 34px rgba(0,0,0,0.5);
   opacity: 0;
   visibility: hidden;
-  transition: opacity .35s var(--ease), transform .35s var(--ease), visibility .35s;
+  transition: opacity .3s var(--ease), transform .3s var(--ease), visibility .3s;
   z-index: 20;
 }
 .compass-wrap:hover .about-card,
 .compass-wrap:focus-visible .about-card,
 .compass-wrap.active .about-card{
   opacity: 1; visibility: visible;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, -58%) scale(1);
 }
 .about-eyebrow{ font-family: var(--font-label); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: .5em; }
 .about-role{ font-family: var(--font-display); font-weight: 600; font-size: 1.08rem; color: var(--cream-ink); margin-bottom: .3em; }

@@ -17,15 +17,23 @@ const ACRONYMS = [
 // Repos to hide from the Field Notes grid
 const HIDE_REPOS = [GITHUB_USERNAME + "." + "github.io"];
 
+const CERTIFICATES = [
+  { name: "Plantation Drive Volunteer", image: "certs/plantation.jpeg" },
+  { name: "ArcGIS Workshop", image: "certs/arcgis.jpeg" },
+  { name: "WWF Eco-Internship", image: "certs/wwf.jpeg" },
+  { name: "Community Service Volunteer", image: "certs/school_visit.jpeg" },
+  { name: "Dep. Director HR for Community Service Society", image: "certs/taba.jpeg" }
+];
+
 // Software/platforms GitHub can't detect on its own
 const TOOLKIT = [
   "QGIS", "ArcMap", "Google Earth Engine", "PostGIS", "Visual Studio Code",
-  "ERDAS Imagine", "Jupyter Notebook", "MATLAB", "AutoCAD"
+  "ERDAS Imagine", "Jupyter Notebook", "MATLAB", "AutoCAD", "Microsoft & Google Suite"
 ];
 
 // Analytical methods and workflows
 const METHODS = [
-  "LULC Classification", "Watershed Delineation", "Run-off Modelling",
+  "LULC Classification", "Watershed Delineation", "Run-off Modelling Setup",
   "Climate Projection & Bias Correction", "Remote Sensing Analysis", "Web Mapping",
   "QGIS Plugin Development", "Statistical Analysis", "Data Structures & Algorithms",
   "Photogrammetry", "Image Processing", "C++", "Numerical Analysis"
@@ -255,6 +263,30 @@ async function loadLanguages(repos){
   }
 }
 
+function renderCertificates(){
+  const list = document.getElementById("cert-list");
+  const overlay = document.getElementById("cert-overlay");
+  const overlayImg = document.getElementById("cert-overlay-img");
+  if (!list || !CERTIFICATES.length){
+    if (list) list.innerHTML = `<p class="loading-msg">No certificates logged yet.</p>`;
+    return;
+  }
+  list.innerHTML = CERTIFICATES.map((c, i) => `
+    <span class="instrument-chip cert-chip" data-index="${i}" tabindex="0"><span class="dot"></span>${c.name}</span>
+  `).join("");
+
+  const show = (cert) => { overlayImg.src = cert.image; overlayImg.alt = cert.name; overlay.classList.add("active"); };
+  const hide = () => overlay.classList.remove("active");
+
+  list.querySelectorAll(".cert-chip").forEach(chip => {
+    const cert = CERTIFICATES[chip.dataset.index];
+    chip.addEventListener("mouseenter", () => show(cert));
+    chip.addEventListener("mouseleave", hide);
+    chip.addEventListener("focus", () => show(cert));
+    chip.addEventListener("blur", hide);
+  });
+}
+
 /* ============================================================
    STATIC CONTENT — instruments
    ============================================================ */
@@ -345,6 +377,7 @@ function initCompassTouch(){
 document.addEventListener("DOMContentLoaded", () => {
   renderChipList("toolkit-list", TOOLKIT);
   renderChipList("methods-list", METHODS);
+  renderCertificates();
   initNav();
   initScrollProgress();
   initCompassTouch();
