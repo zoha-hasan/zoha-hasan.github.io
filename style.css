@@ -95,6 +95,27 @@ body::before{
 }
 .margin-vine circle{ fill: var(--gold); opacity: .8; }
 
+.vine-buds{
+  position: fixed;
+  left: clamp(10px, 3vw, 34px);
+  top: 0;
+  width: 40px;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+  display: none;
+}
+.vine-bud{
+  position: absolute;
+  left: 50%;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: .8;
+  transform: translate(-50%, -50%);
+}
+@media (min-width: 1000px){ .vine-buds{ display: block; } }
+
 .specimen-field{
   position: fixed;
   right: 0;
@@ -466,7 +487,7 @@ h2::after{
 
 .about-card{
   position: absolute;
-  top: 65%;
+  top: 100%;
   left: 50%;
   transform: translate(-50%, -50%) scale(.92);
   width: 250px;
