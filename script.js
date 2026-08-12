@@ -31,7 +31,7 @@ const TOOLKIT = [
   "ERDAS Imagine", "Jupyter Notebook", "MATLAB", "AutoCAD", "Microsoft & Google Suite"
 ];
 
-// Analytical methods and workflows
+// Analytical methods and workflows.
 const METHODS = [
   "LULC Classification", "Watershed Delineation", "Run-off Modelling Setup",
   "Climate Projection & Bias Correction", "Remote Sensing Analysis", "Web Mapping",
