@@ -31,7 +31,7 @@ const TOOLKIT = [
   "ERDAS Imagine", "Jupyter Notebook", "MATLAB", "AutoCAD", "Microsoft & Google Suite"
 ];
 
-// Analytical methods and workflows.
+// Analytical methods and workflows
 const METHODS = [
   "LULC Classification", "Watershed Delineation", "Run-off Modelling Setup",
   "Climate Projection & Bias Correction", "Remote Sensing Analysis", "Web Mapping",
@@ -209,7 +209,7 @@ async function loadRepos(){
     console.warn("Could not load repos:", err);
     if (loadingEl) loadingEl.textContent = "Field notes couldn't be reached right now.";
   }
-}
+} 
 
 async function loadLanguages(repos){
   const container = document.getElementById("lang-bars");
@@ -265,25 +265,37 @@ async function loadLanguages(repos){
 
 function renderCertificates(){
   const list = document.getElementById("cert-list");
-  const overlay = document.getElementById("cert-overlay");
-  const overlayImg = document.getElementById("cert-overlay-img");
-  if (!list || !CERTIFICATES.length){
-    if (list) list.innerHTML = `<p class="loading-msg">No certificates logged yet.</p>`;
+  const lightbox = document.getElementById("cert-lightbox");
+  const lightboxImg = document.getElementById("cert-lightbox-img");
+  const closeBtn = document.getElementById("cert-lightbox-close");
+  if (!list) return;
+  if (!CERTIFICATES.length){
+    list.innerHTML = `<p class="loading-msg">No certificates logged yet.</p>`;
     return;
   }
   list.innerHTML = CERTIFICATES.map((c, i) => `
-    <span class="instrument-chip cert-chip" data-index="${i}" tabindex="0"><span class="dot"></span>${c.name}</span>
+    <button type="button" class="instrument-chip cert-chip" data-index="${i}"><span class="dot"></span>${c.name}</button>
   `).join("");
-
-  const show = (cert) => { overlayImg.src = cert.image; overlayImg.alt = cert.name; overlay.classList.add("active"); };
-  const hide = () => overlay.classList.remove("active");
-
+  const open = (cert) => {
+    lightboxImg.src = cert.image;
+    lightboxImg.alt = cert.name;
+    lightbox.classList.add("active");
+    lightbox.setAttribute("aria-hidden", "false");
+  };
+  const close = () => {
+    lightbox.classList.remove("active");
+    lightbox.setAttribute("aria-hidden", "true");
+  };
   list.querySelectorAll(".cert-chip").forEach(chip => {
     const cert = CERTIFICATES[chip.dataset.index];
-    chip.addEventListener("mouseenter", () => show(cert));
-    chip.addEventListener("mouseleave", hide);
-    chip.addEventListener("focus", () => show(cert));
-    chip.addEventListener("blur", hide);
+    chip.addEventListener("click", () => open(cert));
+  });
+  closeBtn.addEventListener("click", close);
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) close();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") close();
   });
 }
 

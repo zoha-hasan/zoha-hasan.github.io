@@ -39,6 +39,7 @@
 </div>
 
 <!-- Scroll progress -->
+<div class="route-line" aria-hidden="true"></div>
 <div class="scroll-progress" id="scroll-progress"></div>
 
 <!-- Fixed bottom section nav -->
@@ -177,12 +178,9 @@
         <span class="rule" aria-hidden="true"></span>
         <div class="section-head">
           <h2>Certificates</h2>
-          <p class="hint-note">hover a name to preview</p>
+          <p class="hint-note">click a name to view · click outside or Esc to close</p>
         </div>
         <div class="cert-list" id="cert-list"></div>
-        <div class="cert-overlay" id="cert-overlay">
-          <img id="cert-overlay-img" src="" alt="">
-        </div>
       </div>
     </div>
   </section>
@@ -242,6 +240,13 @@
   </footer>
 
 </main>
+
+<div class="cert-lightbox" id="cert-lightbox" aria-hidden="true">
+  <div class="cert-lightbox-frame">
+    <button type="button" class="cert-lightbox-close" id="cert-lightbox-close" aria-label="Close preview">&times;</button>
+    <img class="cert-lightbox-img" id="cert-lightbox-img" src="" alt="">
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
