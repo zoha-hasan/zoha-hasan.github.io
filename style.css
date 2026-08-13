@@ -63,8 +63,8 @@ body::before{
   opacity: .5;
   background-image:
     radial-gradient(rgba(155,203,143,0.05) 1px, transparent 1px),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cg fill='none' stroke='%239BCB8F' stroke-width='.6' opacity='.14'%3E%3Cellipse cx='150' cy='170' rx='130' ry='80'/%3E%3Cellipse cx='150' cy='170' rx='95' ry='58'/%3E%3Cellipse cx='150' cy='170' rx='60' ry='34'/%3E%3Cellipse cx='370' cy='350' rx='110' ry='66'/%3E%3Cellipse cx='370' cy='350' rx='78' ry='46'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: 5px 5px, 500px 500px;
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cg fill='none' stroke='%239BCB8F' stroke-width='.6' opacity='.14'%3E%3Cellipse cx='260' cy='280' rx='230' ry='140'/%3E%3Cellipse cx='260' cy='280' rx='170' ry='100'/%3E%3Cellipse cx='260' cy='280' rx='110' ry='65'/%3E%3Cellipse cx='620' cy='620' rx='210' ry='125'/%3E%3Cellipse cx='620' cy='620' rx='150' ry='88'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 5px 5px, 900px 900px;
 }
 
 /* MARGIN LIFE: growing vine (left) + scattered specimens (right) */
@@ -433,21 +433,21 @@ h2::after{
 
 .about-note{
   position: absolute;
-  top: -20px;
-  right: 34px;
-  width: 96px;
-  padding: 12px 12px 16px;
+  top: clamp(88px, 20vw, 116px);
+  right: -14px;
+  width: 128px;
+  padding: 14px 14px 18px;
   background: var(--gold);
   border: none;
   border-radius: 2px 2px 10px 2px;
   font-family: var(--font-label);
-  font-size: .62rem;
-  line-height: 1.35;
+  font-size: .72rem;
+  line-height: 1.4;
   letter-spacing: .02em;
   color: var(--ink);
   text-align: left;
   cursor: pointer;
-  transform: rotate(8deg);
+  transform: rotate(6deg);
   box-shadow: 3px 6px 14px rgba(0,0,0,.35);
   transition: transform .25s var(--ease), box-shadow .25s var(--ease);
   z-index: 15;
