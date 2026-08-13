@@ -433,8 +433,8 @@ h2::after{
 
 .about-note{
   position: absolute;
-  top: clamp(88px, 20vw, 116px);
-  right: -14px;
+  top: clamp(104px, 24vw, 136px);
+  right: -26px;
   width: 128px;
   padding: 14px 14px 18px;
   background: var(--gold);
@@ -447,7 +447,7 @@ h2::after{
   color: var(--ink);
   text-align: left;
   cursor: pointer;
-  transform: rotate(6deg);
+  transform: rotate(4deg);
   box-shadow: 3px 6px 14px rgba(0,0,0,.35);
   transition: transform .25s var(--ease), box-shadow .25s var(--ease);
   z-index: 15;
