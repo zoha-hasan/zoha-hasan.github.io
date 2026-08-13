@@ -433,8 +433,8 @@ h2::after{
 
 .about-note{
   position: absolute;
-  top: clamp(104px, 24vw, 136px);
-  right: -26px;
+  top: clamp(130px, 30vw, 168px);
+  right: -42px;
   width: 128px;
   padding: 14px 14px 18px;
   background: var(--gold);
