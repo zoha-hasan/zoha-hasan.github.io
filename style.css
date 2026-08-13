@@ -1,8 +1,6 @@
-/* ============================================================
-   TOKENS — the field desk: deep pine ground, parchment specimens
-   ============================================================ */
+/* TOKENS */
 :root{
-  --pine:         #12241A;   /* dominant ground — deep botanical green */
+  --pine:         #12241A;   /* deep green */
   --pine-2:       #1C3626;   /* raised pine surfaces */
   --pine-3:       #274A34;   /* lighter pine, hovers/borders */
   --moss:         #4B7A55;
@@ -55,9 +53,7 @@ a{ color: var(--rust); }
   html{ scroll-behavior: auto; }
 }
 
-/* ============================================================
-   GROUND TEXTURE — topographic contour lines + grain, fixed
-   ============================================================ */
+/* GROUND TEXTURE: topographic contour lines, grain */
 body::before{
   content: "";
   position: fixed;
@@ -67,14 +63,11 @@ body::before{
   opacity: .5;
   background-image:
     radial-gradient(rgba(155,203,143,0.05) 1px, transparent 1px),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cg fill='none' stroke='%239BCB8F' stroke-width='.6' opacity='.14'%3E%3Cellipse cx='90' cy='120' rx='150' ry='90'/%3E%3Cellipse cx='90' cy='120' rx='110' ry='64'/%3E%3Cellipse cx='90' cy='120' rx='72' ry='40'/%3E%3Cellipse cx='320' cy='320' rx='170' ry='100'/%3E%3Cellipse cx='320' cy='320' rx='120' ry='68'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: 5px 5px, 900px 900px;
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cg fill='none' stroke='%239BCB8F' stroke-width='.6' opacity='.14'%3E%3Cellipse cx='150' cy='170' rx='130' ry='80'/%3E%3Cellipse cx='150' cy='170' rx='95' ry='58'/%3E%3Cellipse cx='150' cy='170' rx='60' ry='34'/%3E%3Cellipse cx='370' cy='350' rx='110' ry='66'/%3E%3Cellipse cx='370' cy='350' rx='78' ry='46'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 5px 5px, 500px 500px;
 }
 
-/* ============================================================
-   MARGIN LIFE — growing vine (left) + scattered specimens (right)
-   fills the dead desktop gutters instead of leaving them empty
-   ============================================================ */
+/* MARGIN LIFE: growing vine (left) + scattered specimens (right) */
 .margin-vine{
   position: fixed;
   left: clamp(10px, 3vw, 34px);
@@ -179,9 +172,7 @@ body::before{
   box-shadow: 0 4px 10px rgba(0,0,0,.4);
 }
 
-/* ============================================================
-   ROUTE LINE — dashed trail + travelling compass pin (kept, dimmer)
-   ============================================================ */
+/* ROUTE: dashed trail with travelling compass pin */
 .route-line{
   position: absolute;
   top: 100vh;
@@ -219,17 +210,14 @@ body::before{
   filter: drop-shadow(0 2px 4px rgba(0,0,0,.4));
 }
 
-/* ============================================================
-   PINNED CARD — the signature element: torn parchment tacked
-   to the pine desk, with a rotated shadow-card peeking behind
-   ============================================================ */
+/* PINNED CARD: torn parchment tacked to the pine desk, with a rotated shadow card peeking behind */
 .pin-card{
   position: relative;
   width: 100%;
   max-width: 780px;
   margin: 0 auto;
 }
-/* the "card underneath" — same shape, offset, slightly rotated */
+/* the "card underneath": same shape, offset, slightly rotated */
 .pin-card::before{
   content: "";
   position: absolute;
@@ -256,7 +244,7 @@ body::before{
 .pin-card.tilt-r .pin-card-inner{ transform: rotate(0.6deg); }
 .hero-card .pin-card-inner{ padding-top: 40px; }
 
-/* torn/deckled top + bottom edge, built from a jagged mask strip */
+/* torn/deckled top, bottom edge, built from a jagged mask strip */
 .pin-card-inner::before,
 .pin-card-inner::after{
   content: "";
@@ -299,7 +287,7 @@ body::before{
   z-index: 2;
 }
 
-/* small hole-punch, upper right — filed index-card touch */
+/* small hole-punch, upper right, filed index-card */
 .punch{
   position: absolute;
   top: 18px; right: 22px;
@@ -310,9 +298,7 @@ body::before{
   z-index: 2;
 }
 
-/* ============================================================
-   SCROLL PROGRESS
-   ============================================================ */
+/* SCROLL PROGRESS */
 .scroll-progress{
   position: fixed;
   top: 0; left: 0;
@@ -323,9 +309,7 @@ body::before{
   transition: width .1s linear;
 }
 
-/* ============================================================
-   BOTTOM NAV
-   ============================================================ */
+/* BOTTOM NAV */
 .bottom-nav{
   position: fixed;
   bottom: 18px;
@@ -373,9 +357,7 @@ body::before{
   box-shadow: 0 0 16px rgba(210,162,78,0.6);
 }
 
-/* ============================================================
-   LAYOUT / SECTIONS — single continuous pine ground, no alternation
-   ============================================================ */
+/* LAYOUT / SECTIONS: single continuous pine ground */
 main{ position: relative; z-index: 1; }
 .section{
   width: 100%;
@@ -413,9 +395,7 @@ h2::after{
 }
 .section-sub{ color: var(--ink-soft); opacity: .85; font-size: .96rem; }
 
-/* ============================================================
-   HERO / PROFILE
-   ============================================================ */
+/* HERO / PROFILE */
 .hero-card{ max-width: 500px; }
 .hero-inner{ display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
 
@@ -445,69 +425,82 @@ h2::after{
   background: var(--paper-deep);
 }
 
-.compass-bookmark{
-  position: absolute; top: -2%; right: -8%;
-  width: 24px; height: 46px;
-  background: var(--rust);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.35);
-  transition: transform .35s var(--ease), background .3s var(--ease);
-  z-index: 15;
-  transform-origin: top center;
-}
-.bookmark-arrow{
-  position: absolute; top: 40%; left: 50%;
-  width: 11px; height: 11px;
-  border-left: 2.5px solid var(--paper);
-  border-bottom: 2.5px solid var(--paper);
-  transform: translate(-50%,-50%) rotate(-45deg);
-  animation: arrow-nudge 1.6s ease-in-out infinite;
-}
-@keyframes arrow-nudge{
-  0%,100%{ transform: translate(-50%,-50%) rotate(-45deg); }
-  50%{ transform: translate(-50%,-38%) rotate(-45deg); }
-}
-.compass-wrap:hover .compass-bookmark,
-.compass-wrap:focus-visible .compass-bookmark,
-.compass-wrap.active .compass-bookmark{
-  transform: rotate(-6deg) translate(-2px, 2px);
-  background: var(--gold);
-}
-
-.compass-hint{
-  font-family: var(--font-label);
-  font-size: .6rem; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--ink-soft); opacity: .55; margin: 6px 0 0;
-}
 .hint-note{
   font-family: var(--font-label);
   font-size: .74rem; letter-spacing: .05em; text-transform: uppercase;
   opacity: .75; color: var(--ink-soft); text-align: center; margin-top: -4px;
 }
 
-.about-card{
+.about-note{
   position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(.92);
-  width: 250px;
+  top: -20px;
+  right: 34px;
+  width: 96px;
+  padding: 12px 12px 16px;
+  background: var(--gold);
+  border: none;
+  border-radius: 2px 2px 10px 2px;
+  font-family: var(--font-label);
+  font-size: .62rem;
+  line-height: 1.35;
+  letter-spacing: .02em;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transform: rotate(8deg);
+  box-shadow: 3px 6px 14px rgba(0,0,0,.35);
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease);
+  z-index: 15;
+}
+.about-note::before{ /* folded corner */
+  content: "";
+  position: absolute;
+  right: 0; bottom: 0;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 0 0 14px 14px;
+  border-color: transparent transparent rgba(36,27,16,.28) transparent;
+}
+.about-note::after{ /* pin */
+  content: "";
+  position: absolute;
+  top: -6px; left: 14px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #E8C88A, var(--gold) 55%, #8A6423 100%);
+  box-shadow: 0 2px 4px rgba(0,0,0,.4);
+}
+.about-note:hover, .about-note:focus-visible{
+  transform: rotate(3deg) translateY(-3px);
+  box-shadow: 4px 10px 20px rgba(0,0,0,.45), 0 0 14px rgba(155,203,143,.4);
+  outline: none;
+}
+
+.about-lightbox{
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 5vh 5vw;
+  background: rgba(18,36,26,0.9);
+  backdrop-filter: blur(3px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s var(--ease);
+}
+.about-lightbox.active{ opacity: 1; pointer-events: auto; }
+.about-lightbox-frame{
+  position: relative;
+  max-width: 380px;
+  width: 90vw;
   background: var(--pine-2);
   border: 1px solid rgba(210,162,78,0.4);
-  border-radius: var(--radius);
-  padding: 16px 18px;
+  border-radius: 10px;
+  padding: 26px 24px 22px;
   text-align: left;
-  box-shadow: 0 14px 34px rgba(0,0,0,0.5);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity .3s var(--ease), transform .3s var(--ease), visibility .3s;
-  z-index: 20;
+  box-shadow: 0 30px 70px rgba(0,0,0,.6);
+  transform: scale(.94);
+  transition: transform .3s var(--ease);
 }
-.compass-wrap:hover .about-card,
-.compass-wrap:focus-visible .about-card,
-.compass-wrap.active .about-card{
-  opacity: 1; visibility: visible;
-  transform: translate(-50%, -50%) scale(1);
-}
+.about-lightbox.active .about-lightbox-frame{ transform: scale(1); }
+
 .about-eyebrow{ font-family: var(--font-label); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: .5em; }
 .about-role{ font-family: var(--font-display); font-weight: 600; font-size: 1.08rem; color: var(--cream-ink); margin-bottom: .3em; }
 .about-focus, .about-goal{ font-size: .84rem; margin-bottom: .5em; color: var(--cream-ink); opacity: .85; }
@@ -541,9 +534,7 @@ h2::after{
 .scroll-cue span{ width: 3px; height: 6px; background: var(--rust); border-radius: 2px; animation: cue-move 1.8s ease-in-out infinite; }
 @keyframes cue-move{ 0%,100%{ transform: translateY(0); opacity: 1; } 50%{ transform: translateY(7px); opacity: .3; } }
 
-/* ============================================================
-   FIELD NOTES — postcards, stamped edges, glow lift
-   ============================================================ */
+/* FIELD NOTES: postcards, stamped edges, glow lift */
 .postcard-grid{
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -604,9 +595,7 @@ h2::after{
 }
 .postcard:hover .tag-chip{ background: rgba(210,162,78,0.18); color: var(--gold); }
 
-/* ============================================================
-   INSTRUMENTS / SKILLS — corkboard specimen labels
-   ============================================================ */
+/* INSTRUMENTS / SKILLS: specimen labels */
 .instrument-list{ display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px 10px; max-width: 640px; margin: 0 auto; }
 .instrument-chip{
   display: inline-flex; align-items: center; gap: 7px;
@@ -633,9 +622,7 @@ h2::after{
 }
 .instrument-chip .dot{ width: 6px; height: 6px; border-radius: 50%; background: var(--rust); }
 
-/* ============================================================
-   LANGUAGES / LEGEND
-   ============================================================ */
+/* LANGUAGES / LEGEND */
 .legend-bars{ max-width: 580px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
 .legend-row{ display: grid; grid-template-columns: 112px 1fr 44px; align-items: center; gap: 14px; }
 .legend-name{ font-size: .86rem; }
@@ -643,9 +630,7 @@ h2::after{
 .legend-fill{ height: 100%; background: repeating-linear-gradient(90deg, var(--rust) 0 6px, var(--gold) 6px 8px); border-radius: 999px; width: 0%; transition: width 1s var(--ease); }
 .legend-pct{ font-family: var(--font-label); font-size: .74rem; color: var(--rust); text-align: right; }
 
-/* ============================================================
-   FOOTER
-   ============================================================ */
+/* FOOTER */
 .site-footer{ text-align: center; padding: 50px 24px 130px; color: var(--cream-ink); opacity: .85; font-size: .82rem; position: relative; z-index: 1; }
 .field-log-footer{ font-family: var(--font-label); font-style: normal; margin-bottom: .4em; color: var(--gold); }
 .footer-note{ font-size: .74rem; letter-spacing: .05em; opacity: .65; margin: 0; }

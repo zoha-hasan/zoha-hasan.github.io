@@ -1,7 +1,4 @@
-/* ============================================================
-   CONFIG — edit these
-   ============================================================ */
-const GITHUB_USERNAME = "zoha-hasan"; // <-- change this
+const GITHUB_USERNAME = "zoha-hasan"; 
 
 // Override auto-formatted names for specific repos.
 const CUSTOM_REPO_NAMES = {
@@ -25,7 +22,7 @@ const CERTIFICATES = [
   { name: "Dep. Director HR for Community Service Society", image: "certs/taba.jpeg" }
 ];
 
-// Software/platforms GitHub can't detect on its own
+// Software/platforms
 const TOOLKIT = [
   "QGIS", "ArcMap", "Google Earth Engine", "PostGIS", "Visual Studio Code",
   "ERDAS Imagine", "Jupyter Notebook", "MATLAB", "AutoCAD", "Microsoft & Google Suite"
@@ -39,9 +36,7 @@ const METHODS = [
   "Photogrammetry", "Image Processing", "C++", "Numerical Analysis"
 ];
 
-/* ============================================================
-   HELPERS
-   ============================================================ */
+// HELPERS
 function formatRepoName(raw){
   if (CUSTOM_REPO_NAMES[raw]) return CUSTOM_REPO_NAMES[raw];
   return raw
@@ -139,10 +134,8 @@ async function loadContributionsThisYear(){
   }
 }
 
-/* ============================================================
-   GITHUB DATA
-   ============================================================ */
-async function loadProfile(){
+// GITHUB DATA
+   async function loadProfile(){
   try{
     const res = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}`);
     if (!res.ok) throw new Error("profile fetch failed");
@@ -263,6 +256,19 @@ async function loadLanguages(repos){
   }
 }
 
+function initAboutLightbox(){
+  const btn = document.getElementById("about-note-btn");
+  const lightbox = document.getElementById("about-lightbox");
+  const closeBtn = document.getElementById("about-lightbox-close");
+  if (!btn || !lightbox) return;
+  const open = () => { lightbox.classList.add("active"); lightbox.setAttribute("aria-hidden", "false"); };
+  const close = () => { lightbox.classList.remove("active"); lightbox.setAttribute("aria-hidden", "true"); };
+  btn.addEventListener("click", open);
+  closeBtn.addEventListener("click", close);
+  lightbox.addEventListener("click", (e) => { if (e.target === lightbox) close(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+}
+
 function renderCertificates(){
   const list = document.getElementById("cert-list");
   const lightbox = document.getElementById("cert-lightbox");
@@ -299,9 +305,7 @@ function renderCertificates(){
   });
 }
 
-/* ============================================================
-   STATIC CONTENT — instruments
-   ============================================================ */
+// STATIC CONTENT: instruments
 function renderChipList(containerId, items){
   const list = document.getElementById(containerId);
   list.innerHTML = items.map(item => `
@@ -309,9 +313,7 @@ function renderChipList(containerId, items){
   `).join("");
 }
 
-/* ============================================================
-   UI BEHAVIOR — nav, scroll progress, scroll-spy, compass touch, route pin, vine growth
-   ============================================================ */
+//UI BEHAVIOR: nav, scroll progress, scroll-spy, compass touch, route pin, vine growth
 function initNav(){
   const buttons = document.querySelectorAll(".nav-btn");
   buttons.forEach(btn => {
@@ -372,20 +374,11 @@ function initScrollProgress(){
 function initCompassTouch(){
   const wrap = document.getElementById("compass-wrap");
   wrap.addEventListener("click", () => {
-    const isActive = wrap.classList.toggle("active");
-    wrap.setAttribute("aria-expanded", isActive ? "true" : "false");
-  });
-  wrap.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " "){
-      e.preventDefault();
-      wrap.click();
-    }
+    wrap.classList.toggle("active");
   });
 }
 
-/* ============================================================
-   INIT
-   ============================================================ */
+// INIT
 document.addEventListener("DOMContentLoaded", () => {
   renderChipList("toolkit-list", TOOLKIT);
   renderChipList("methods-list", METHODS);
@@ -393,6 +386,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initNav();
   initScrollProgress();
   initCompassTouch();
+  initAboutLightbox();
   loadProfile();
   loadRepos();
   loadContributionsThisYear();

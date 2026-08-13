@@ -173,16 +173,19 @@
 
 <main>
 
-  <!-- ============ PROFILE / HERO ============ -->
+  <!-- PROFILE / HERO  -->
   <section id="profile" class="section hero">
     <div class="pin-card hero-card">
       <div class="pin-card-inner">
         <span class="accent-bar" aria-hidden="true"></span>
         <span class="punch" aria-hidden="true"></span>
         <span class="rule" aria-hidden="true"></span>
+        <button type="button" class="about-note" id="about-note-btn" aria-haspopup="dialog" aria-controls="about-lightbox">
+          A note about me<br>↳ tap to read
+        </button>
         <div class="hero-inner">
 
-          <div class="compass-wrap" id="compass-wrap" tabindex="0" role="button" aria-expanded="false" aria-label="Hover or tap to show about me">
+          <div class="compass-wrap" id="compass-wrap">
             <div class="compass-ring">
               <svg class="compass-face" viewBox="0 0 120 120" aria-hidden="true">
                 <circle cx="60" cy="60" r="57" class="compass-outer"/>
@@ -201,17 +204,8 @@
                 <circle cx="60" cy="60" r="4.5" class="needle-pin"/>
               </svg>
               <img class="avatar" id="avatar" src="" alt="Profile photo">
-              <span class="compass-bookmark" aria-hidden="true"><span class="bookmark-arrow"></span></span>
-            </div>
-
-            <div class="about-card" id="about-card">
-              <p class="about-eyebrow">Field Position</p>
-              <p class="about-role" id="about-role">GIS &amp; Remote Sensing Engineering Student.</p>
-              <p class="about-focus" id="about-focus">Currently mapping disaster impact, watershed hydrology, CMIP6 climate projections, building web maps and dynamic QGIS plugins</p>
-              <p class="about-goal" id="about-goal">To grow into the role of someone who can use GIS to aid in solving real-world environmental and climate challenges.</p>
-            </div>
+            </div>           
           </div>
-          <p class="compass-hint">Hover to orient</p>
           <div class="identity">
             <p class="eyebrow">Entry No. 01</p>
             <h1 id="display-name">Your Name</h1>
@@ -252,7 +246,7 @@
     </div>
   </section>
 
-  <!-- ============ FIELD NOTES / PROJECTS ============ -->
+  <!-- FIELD NOTES / PROJECTS -->
   <section id="field-notes" class="section">
     <div class="pin-card tilt-r">
       <div class="pin-card-inner">
@@ -270,7 +264,7 @@
     </div>
   </section>
 
-  <!-- ============ CERTIFICATES ============ -->
+  <!-- CERTIFICATES -->
   <section id="certificates" class="section">
     <div class="pin-card">
       <div class="pin-card-inner">
@@ -286,7 +280,7 @@
     </div>
   </section>
 
-  <!-- ============ INSTRUMENTS / SKILLS ============ -->
+  <!-- INSTRUMENTS / SKILLS -->
   <section id="instruments" class="section">
     <div class="pin-card">
       <div class="pin-card-inner">
@@ -317,7 +311,7 @@
     </div>
   </section>
 
-  <!-- ============ LANGUAGES / LEGEND ============ -->
+  <!-- LANGUAGES / LEGEND -->
   <section id="languages" class="section">
     <div class="pin-card">
       <div class="pin-card-inner">
@@ -340,6 +334,16 @@
   </footer>
 
 </main>
+
+<div class="about-lightbox" id="about-lightbox" aria-hidden="true">
+  <div class="about-lightbox-frame">
+    <button type="button" class="cert-lightbox-close" id="about-lightbox-close" aria-label="Close">&times;</button>
+    <p class="about-eyebrow">Field Position</p>
+    <p class="about-role" id="about-role">GIS &amp; Remote Sensing Engineering Student.</p>
+    <p class="about-focus" id="about-focus">Currently mapping disaster impact, watershed hydrology, CMIP6 climate projections, building web maps and dynamic QGIS plugins</p>
+    <p class="about-goal" id="about-goal">To grow into the role of someone who can use GIS to aid in solving real-world environmental and climate challenges.</p>
+  </div>
+</div>
 
 <div class="cert-lightbox" id="cert-lightbox" aria-hidden="true">
   <div class="cert-lightbox-frame">
